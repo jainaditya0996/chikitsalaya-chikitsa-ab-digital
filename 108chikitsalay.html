@@ -1,0 +1,2632 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chikitsalaya Telemedicine </title>
+    <style>
+:root {
+    --primary-color: #a6f0c6;   
+    --primary-dark: #7fdba8;    
+    --bg-light: hsl(219, 61%, 59%);       
+    --bg-dark: #061c44;       
+    --text-light: #ffffff;      
+    --text-dark: #d1f5e4;       
+    --card-bg-light: #112b60;   
+    --card-bg-dark: #0a1d40;    
+    --border-radius: 12px;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+    min-height: 100vh;
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+        body.dark-mode {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #34495e 100%);
+            color: var(--text-dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 28000px;
+            height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px;
+        }
+
+        .login-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .login-page h1 {
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .slogan-display {
+            font-size: 18px;
+            font-weight: 500;
+            color: #13c60d;
+            height: 50px;
+            margin-bottom: 20px;
+            animation: slideIn 1.5s ease-in-out;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .login-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 350px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .login-options button {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .login-options button.primary {
+    background-color: var(--card-bg-light);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.login-options button.secondary {
+    background-color: var(--primary-color);
+    color: #0a2a66;  /* dark blue text */
+    font-weight: bold;
+}
+
+
+        .login-options button.google-btn {
+            background-color: #fff;
+            color: #4285f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .login-options button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-options button img {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .doctor-sub-options, .consultant-form, .doctor-login-form, .doctor-password-form {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 350px;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        
+        .main-page {
+            display: none;
+            padding: 0;
+            position: relative;
+        }
+
+        .header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 25px; 
+    background-color: rgba(8, 6, 83, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+        .dark-mode .header {
+            background-color: rgba(44, 62, 80, 0.8);
+        }
+        
+        #backBtn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-light);
+            font-size: 20px;
+        }
+
+        .dark-mode #backBtn {
+            color: var(--text-dark);
+        }
+
+        #profilePhotoContainer {
+            margin-right: auto;
+            padding-left: 15px;
+            cursor: pointer;
+        }
+
+        #profilePhoto {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            object-fit: cover;
+        }
+       #greetingHeading {
+    margin: 0;
+    font-size: 26px;   
+    font-weight: 600;
+}
+
+#profilePhoto {
+    width: 60px;       
+    height: 60px;
+    border-radius: 50%;  
+    border: 3px solid var(--primary-color);
+    object-fit: cover;
+    cursor: pointer;
+}
+
+
+        .dark-mode #profilePhoto {
+            border-color: var(--primary-dark);
+        }
+
+        .ist-clock {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            padding-right: 15px;
+        }
+
+        .dark-mode .ist-clock {
+            color: var(--text-dark);
+        }
+
+        .settings-toggles {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-btn {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+            background-color: transparent;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dark-mode .language-btn {
+            color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .language-btn.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .dark-mode .language-btn.active {
+            background-color: var(--primary-dark);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 28px;
+        }
+        .dark-mode .toggle-switch .slider {
+            background-color: #777;
+        }
+
+        .toggle-switch .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            position: sticky;
+            top: 60px;
+            z-index: 99;
+            padding: 0 15px;
+            background: inherit;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg-light);
+            color: var(--text-light);
+            font-size: 16px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .dark-mode .search-bar input {
+            background-color: var(--card-bg-dark);
+            color: var(--text-dark);
+        }
+
+        .search-bar .search-icon {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .health-slogan {
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+
+        .health-slogan p {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 15px;
+        }
+
+        .feature-item {
+            background-color: var(--card-bg-light);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: var(--box-shadow);
+        }
+
+        .dark-mode .feature-item {
+            background-color: var(--card-bg-dark);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .feature-icon {
+            color: var(--primary-dark);
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .feature-item p {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .dark-mode .feature-item p {
+            color: #bbb;
+        }
+
+        .upcoming-camps, .schemes-section, .health-reels-section {
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .upcoming-camps h3, .schemes-section h3, .health-reels-section h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .camp-item {
+            background-color: var(--card-bg-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .dark-mode .camp-item {
+            background-color: var(--card-bg-dark);
+        }
+
+        .scheme-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .scheme-item {
+            background-color: var(--card-bg-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .dark-mode .scheme-item {
+            background-color: var(--card-bg-dark);
+        }
+
+        .scheme-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .scheme-item i {
+            font-size: 30px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .scheme-item i {
+            color: var(--primary-dark);
+        }
+
+        .reel-container {
+            display: flex;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            gap: 15px;
+        }
+
+        .reel-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .reel-item {
+            flex: 0 0 80%;
+            scroll-snap-align: start;
+            background-color: var(--card-bg-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dark-mode .reel-item {
+            background-color: var(--card-bg-dark);
+        }
+
+        .reel-item img {
+            width: 100%;
+            height: 2000px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .reel-content {
+            padding: 15px;
+        }
+
+        .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    
+}
+
+        
+        .bottom-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 100%;
+    background-color: var(--card-bg-light);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    z-index: 101;
+    
+    border-right: 1px solid #ddd;
+    justify-content: space-around;
+    padding: 5px;
+}
+.bottom-nav .nav-item {
+    flex: 1;
+    text-align: center;
+}
+#profilePhoto {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+
+
+.dark-mode .bottom-nav {
+    background-color: var(--card-bg-dark);
+}
+
+.nav-item {
+    text-align: center;
+    color: #777;
+    font-size: 12px;
+    text-decoration: none;
+    margin: 20px 0;
+    width: 100%;
+}
+.nav-item.active {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.nav-item i {
+    color: var(--primary-color);
+}
+
+.nav-item i {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+        
+
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg-light);
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 0.3s ease-out;
+            position: relative;
+        }
+
+        .dark-mode .modal-content {
+            background-color: var(--card-bg-dark);
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .modal input[type="text"],
+        .modal input[type="email"],
+        .modal input[type="password"],
+        .modal input[type="file"],
+        .modal input[type="date"],
+        .modal select,
+        .modal textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        .dark-mode .modal input,
+        .dark-mode .modal select,
+        .dark-mode .modal textarea {
+            background-color: #444;
+            color: var(--text-dark);
+            border-color: #666;
+        }
+
+        .modal-btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .modal button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        #profileContent, #cardUploadSection {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-section {
+            padding: 15px;
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius);
+        }
+
+        .dark-mode .form-section {
+            background-color: #34495e;
+        }
+
+        .emergency-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            z-index: 100;
+            background: #e74c3c;
+            color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        #emergencyOptions {
+            position: fixed;
+            bottom: 170px;
+            right: 20px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 99;
+        }
+
+        .emergency-option {
+            background: #fff;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .dark-mode .emergency-option {
+            background: #34495e;
+            color: #fff;
+        }
+
+        .emergency-option i {
+            margin-right: 8px;
+        }
+
+        .loading-spinner {
+            display: none;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #4CAF50;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .chat-container {
+            height: 350px;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .chat-message {
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .chat-message.user {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chat-message.bot {
+            background-color: #e0e0e0;
+            align-self: flex-start;
+        }
+
+        .dark-mode .chat-message.bot {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg-light);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .transaction-item {
+            background-color: var(--card-bg-dark);
+        }
+
+        .transaction-item.pending { border-left: 5px solid orange; }
+        .transaction-item.refunded { border-left: 5px solid red; }
+        .transaction-item.completed { border-left: 5px solid green; }
+
+        .hospital-card {
+            background-color: var(--card-bg-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 15px;
+        }
+
+        .dark-mode .hospital-card {
+            background-color: var(--card-bg-dark);
+        }
+
+        .blood-report-item {
+            background-color: var(--card-bg-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 15px;
+        }
+
+        .dark-mode .blood-report-item {
+            background-color: var(--card-bg-dark);
+        }
+
+        .appointment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .appointment-item .join-btn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        .appointment-item .join-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .call-btn {
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .call-btn:hover {
+            background-color: #2980b9;
+        }
+
+        #chatbot-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        #chat-messages {
+            height: 260px;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+        }
+        .msg {
+            margin: 6px 0;
+            padding: 10px 14px;
+            border-radius: 16px;
+            max-width: 80%;
+            word-break: break-word;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.5;
+            display: inline-block;
+        }
+        .msg.user {
+            background: #08a4e7;
+            color: #fff;
+            align-self: flex-end;
+            margin-left: auto;
+            margin-right: 0;
+            border-bottom-right-radius: 4px;
+            text-align: right;
+        }
+        .msg.bot {
+            background: #f1f1f1;
+            color: #222;
+            align-self: flex-start;
+            margin-left: 0;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+            text-align: left;
+        }
+        .speak-btn {
+            background: none;
+            border: none;
+            color: #08a4e7;
+            font-size: 18px;
+            margin-left: 8px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        .more-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+        .more-btns button {
+            background: #e0f7fa;
+            color: #00796b;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 2px;
+            transition: background 0.2s;
+        }
+        .more-btns button:hover {
+            background: #b2ebf2;
+        }
+
+    
+@media screen and (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .bottom-nav {
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        border-right: none;
+        border-top: 1px solid #ddd;
+    }
+
+    .nav-item {
+        flex: 1;
+        margin: 0;
+        font-size: 10px;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+    }
+}
+
+
+@media screen and (min-width: 769px) {
+    body {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .bottom-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        border-top: none;
+        border-right: 1px solid #ddd;
+    }
+
+    .container.main-page {
+        margin-left: 190px; margin-right: 40px;
+        width: calc(100% - 80px);
+    }
+
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+body {
+    scrollbar-width: none;
+}
+
+
+body {
+    -ms-overflow-style: none;
+}
+.app-logo {
+    width: 120px;      
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 50%;  
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <button id="globalBackBtn"
+    style="position:fixed;top:18px;left:18px;z-index:9999;display:none;
+    padding:6px 10px;border-radius:50%;background:#4CAF50;color:#fff;
+    border:none;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.15);width:36px;height:36px;display:flex;align-items:center;justify-content:center;">
+    <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <div class="login-page" id="loginPage">
+        <img src="Logo.png" alt="Chikitsalaya Logo" class="app-logo">
+
+        <h1>WELCOME TO चिकित्सालय </h1>
+        <div class="slogan-display"></div>
+        <div class="login-options" id="mainLoginOptions">
+            
+            <button class="primary" id="citizenLoginBtn">Login as a Citizen</button>
+            <button class="secondary" onclick="showDoctorLoginOptions()">Login as a Doctor</button>
+            <button class="primary" id="signupBtn">Sign Up</button> <!-- SIGNUP BUTTON ADDED -->
+        </div>
+        
+        <div class="modal" id="signupModal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal('signupModal')">&times;</span>
+                <h2>Sign Up</h2>
+                <form id="signupForm">
+                    <label for="signupName">Name:</label>
+                    <input type="text" id="signupName" required>
+                    <label for="signupMobile">Mobile No.:</label>
+                    <input type="text" id="signupMobile" required>
+                    <label for="signupFather">Father's Name:</label>
+                    <input type="text" id="signupFather" required>
+                    <label for="signupAge">Age:</label>
+                    <input type="number" id="signupAge" required>
+                    <label for="signupOtp">OTP:</label>
+                    <input type="text" id="signupOtp" required>
+                    <button type="submit">Submit</button>
+                </form>
+                <div id="signupMessage" class="form-message"></div>
+            </div>
+        </div>
+        <div class="login-options doctor-sub-options" id="doctorSubOptions">
+            <button class="primary" onclick="showConsultantForm()">Apply as a Consultant</button>
+            <button class="secondary" onclick="showDoctorLoginForm()">Already a part</button>
+        </div>
+        <div class="login-options consultant-form" id="consultantForm">
+            <h2>Apply as a Consultant</h2>
+            <p>Please provide your details for verification.</p>
+            <form id="consultantApplyForm">
+                <input type="text" id="licenseNo" placeholder="License Number" required>
+                <input type="text" id="degree" placeholder="Degree (e.g., MBBS, MD)" required>
+                <label for="proofUpload">Upload Proof (License, Degree):</label>
+                <input type="file" id="proofUpload" required>
+                <button type="submit">Submit for Verification</button>
+            </form>
+            <div id="verificationMessage" class="form-message"></div>
+        </div>
+        <div class="login-options doctor-login-form" id="doctorLoginForm">
+            <h2>Doctor Login</h2>
+            <form id="doctorAccessForm">
+                <input type="email" id="doctorEmail" placeholder="Email ID" required>
+                <input type="password" id="doctorPassword" placeholder="Password" required>
+                <input type="text" id="doctorOtp" placeholder="OTP" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="doctorLoginMessage" class="form-message"></div>
+        </div>
+    </div>
+
+    <div class="container main-page" id="mainPage">
+
+       
+
+        <div id="homeSection" class="content-section">
+            <div class="main-content">
+                <div class="greeting" style="display: flex; align-items: center; gap: 15px; justify-content: flex-start;">
+    <!-- Profile photo -->
+    <div id="profilePhotoContainer" onclick="showProfileMenu()">
+        <img id="profilePhoto" src="https://api.dicebear.com/9.x/pixel-art/svg?seed=man" alt="Profile">
+    </div>
+
+    <!-- Welcome text -->
+    <h2 id="greetingHeading">Welcome, User!</h2>
+</div>
+
+<p id="greetingSlogan">Your health is our priority.</p>
+
+
+                <div class="search-bar">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search Doctor, Lab, etc...">
+                </div>
+
+                <div class="feature-grid">
+                    
+                    <div class="feature-item" id="onlineDoctorBtn" onclick="showModal('onlineDoctorModal')">
+                        <i class="fas fa-video feature-icon"></i>
+                        <h4 class="feature-title">Online Doctor</h4>
+                        <p>Consult a doctor now</p>
+                    </div>
+                    <div class="feature-item" id="prescriptionBtn" onclick="showModal('prescriptionModal')">
+                        <i class="fas fa-receipt feature-icon"></i>
+                        <h4 class="feature-title">Prescriptions</h4>
+                        <p>View your prescriptions</p>
+                    </div>
+                    <div class="feature-item" id="medicalStoreLocatorBtn" onclick="showModal('medicalStoreModal')">
+                        <i class="fas fa-map-marker-alt feature-icon"></i>
+                        <h4 class="feature-title">Medical Store Locator</h4>
+                        <p>Find nearby stores</p>
+                    </div>
+                    <div class="feature-item" id="bloodReportBtn" onclick="showModal('bloodReportModal')">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h4 class="feature-title">Blood Report</h4>
+                        <p>View your lab results</p>
+                    </div>
+                    <div class="feature-item" id="transactionBtn" onclick="showModal('transactionModal')">
+                        <i class="fas fa-credit-card feature-icon"></i>
+                        <h4 class="feature-title">Transactions</h4>
+                        <p>Check your payments</p>
+                    </div>
+                    <div class="feature-item" id="offlineAppointmentBtn" onclick="showModal('offlineAppointmentModal')">
+                        <i class="fas fa-hospital-alt feature-icon"></i>
+                        <h4 class="feature-title">Offline Appointment</h4>
+                        <p>Book an appointment</p>
+                    </div>
+                    <div class="feature-item" id="bloodDonationBtn" onclick="showModal('bloodDonationModal')">
+                        <i class="fas fa-tint feature-icon"></i>
+                        <h4 class="feature-title">Blood Donation</h4>
+                        <p>Donate blood, save lives</p>
+                    </div>
+                    <div class="feature-item" id="ngoBtn" onclick="showModal('ngoModal')">
+                        <i class="fas fa-user-friends feature-icon"></i>
+                        <h4 class="feature-title">NGO</h4>
+                        <p>Support local NGOs</p>
+                    </div>
+                    <div class="feature-item" onclick="showModal('healthMeterModal')">
+    <i class="fas fa-chart-pie feature-icon"></i>
+    <h4 class="feature-title">Health Meter</h4>
+    <p>Track your health</p>
+</div>
+
+<div class="feature-item" onclick="showModal('medicineDeliveryModal')">
+    <i class="fas fa-pills feature-icon"></i>
+    <h4 class="feature-title">Medicine Delivery</h4>
+    <p>Order medicines</p>
+</div>
+
+<div class="feature-item" onclick="showModal('medicineReminderModal')">
+    <i class="fas fa-bell feature-icon"></i>
+    <h4 class="feature-title">Medicine Reminder</h4>
+    <p>Set medicine alarms</p>
+</div>
+
+                </div>
+
+                <div class="upcoming-camps">
+                    <h3>Upcoming Blood Donation Camps</h3>
+                    <div class="camp-item">
+                        <h4>Nabha Community Center</h4>
+                        <p>25 December 2024</p>
+                    </div>
+                </div>
+
+               <div class="health-reels-section">
+    <h3>🎥 ShortCapsule</h3>
+    <div class="reel-container">
+        <div class="reel-item">
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/L6iCj_iCIVM" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="reel-item">
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/0MnDIHXVA7s" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+                        <div class="reel-item">
+                            <img src="https://via.placeholder.com/300x150" alt="Reel 2">
+                            <div class="reel-content">
+                                <h4>Healthy Diet Tips</h4>
+                                <p>Simple steps for a balanced diet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="schemesSection" class="content-section" style="display: none;">
+            <div class="main-content">
+                <h2>Government Schemes</h2>
+                <div id="schemesList">
+                    <div class="scheme-item">
+                        <i class="fas fa-hands-helping"></i>
+                        <h3>Ayushman Bharat</h3>
+                        <p>Healthcare for all.</p>
+                        <a href="#" class="button">Learn More</a>
+                    </div>
+                    <div class="scheme-item">
+                        <i class="fas fa-medkit"></i>
+                        <h3>Pradhan Mantri Jan Arogya Yojana</h3>
+                        <p>Provides health cover of ₹5 lakh.</p>
+                        <a href="#" class="button">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="healthTipsSection" class="content-section" style="display: none;">
+            <div class="main-content">
+                <h2>Health Awareness Reels</h2>
+                <div class="reel-container">
+                    <div class="reel-item">
+                        <img src="https://via.placeholder.com/300x150" alt="Reel 1">
+                        <div class="reel-content">
+                            <h4>COVID-19 Awareness</h4>
+                            <p>Learn about symptoms and prevention.</p>
+                        </div>
+                    </div>
+                    <div class="reel-item">
+                        <img src="https://via.placeholder.com/300x150" alt="Reel 2">
+                        <div class="reel-content">
+                            <h4>Healthy Diet Tips</h4>
+                            <p>Simple steps for a balanced diet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="donationSection" class="content-section" style="display: none;">
+            <div id="donationSection" class="content-section">
+    <div class="donation-container">
+        <!-- Left: Donation Content -->
+        <div class="donation-content">
+            <h2>Support Our Mission</h2>
+            <p>Your small contribution can make a big difference.</p>
+            <button class="donate-btn">Donate Now</button>
+        </div>
+
+        <!-- Right: Donation Image -->
+        <div class="donation-image">
+            <img src="donate.png" alt="Donate Now Logo">
+        </div>
+    </div>
+</div>
+
+            <div class="main-content">
+                <h2>Donation</h2>
+                <div class="form-section">
+                    <h3>Punjab Flood Relief</h3>
+                    <p>Help us provide essential supplies to flood victims.</p>
+                    <form id="donationForm">
+                        <label for="donorName">Name:</label>
+                        <input type="text" id="donorName" required>
+                        <label for="donorMobile">Mobile No.:</label>
+                        <input type="text" id="donorMobile" required>
+                        <label for="donationAmount">Amount:</label>
+                        <input type="number" id="donationAmount" required>
+                        <button type="submit">Donate Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="aiChikitsakSection" class="content-section" style="display: none;">
+            <div class="main-content">
+                <h2>AI Chikitsak - Medical Assistant</h2>
+                <div id="chatbot-container">
+                    <div class="more-btns" id="moreBtns">
+                        <button class="pre-btn">I have cold</button>
+                        <button class="pre-btn">I am not feeling well</button>
+                        <button class="pre-btn">I have headache</button>
+                        <button class="pre-btn">I have stomach pain</button>
+                        <button class="pre-btn">What is diabetes?</button>
+                        <button class="pre-btn">How to control blood pressure?</button>
+                        <button class="pre-btn">What to do in fever?</button>
+                        <button class="pre-btn">What is a balanced diet?</button>
+                        <button class="pre-btn">Tell me about vaccination</button>
+                        <button class="pre-btn">Explain symptoms of dengue</button>
+                    </div>
+                    <div id="chat-messages"></div>
+                    <div id="chat-input-area" style="display:flex;gap:5px;">
+                        <select id="lang-select">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी</option>
+                            <option value="hi-en">Hinglish</option>
+                        </select>
+                        <input type="text" id="chat-input" placeholder="Type your message...">
+                        <button id="voice-btn" title="Voice Input">🎤</button>
+                        <button id="send-btn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; 2025 chikitsalaya. All rights reserved. chikitsa Ab digital  [by tech profigies]
+        </div>
+    </div>
+<nav class="bottom-nav">
+
+    <div class="nav-item">
+        <button class="language-btn" id="langToggleBtn" onclick="toggleLanguage()">हिन्दी</button>
+    </div>
+
+    <div class="nav-item">
+        <label class="toggle-switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <a href="#" class="nav-item active" data-section="home" onclick="showSection('home')">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="#" class="nav-item" data-section="schemes" onclick="showSection('schemes')">
+        <i class="fas fa-briefcase-medical"></i>
+        <span>Schemes</span>
+    </a>
+    <a href="#" class="nav-item" data-section="health-tips" onclick="showSection('health-tips')">
+        <i class="fas fa-heartbeat"></i>
+        <span>Health Tips</span>
+    </a>
+    <a href="#" class="nav-item" data-section="aiChikitsak" onclick="showSection('aiChikitsak')">
+        <i class="fas fa-robot"></i>
+        <span>AI Chikitsak</span>
+    </a>
+    <a href="#" class="nav-item" data-section="donation" onclick="showSection('donation')">
+        <i class="fas fa-donate"></i>
+        <span>Donate</span>
+    </a>
+
+
+    <div class="nav-item ist-clock" id="ist-clock">--:--</div>
+</nav>
+
+
+    
+    <div id="profileMenuModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('profileMenuModal')">&times;</span>
+            <h2>Profile Menu</h2>
+            <div class="modal-btn-group" style="flex-direction: column;">
+                <button onclick="showModal('profileModal'); closeModal('profileMenuModal')">Complete Your Profile</button>
+                <button onclick="showModal('feedbackModal'); closeModal('profileMenuModal')">Feedback</button>
+                <button onclick="showSection('donation'); closeModal('profileMenuModal')">Donation</button>
+                <button onclick="showModal('rateUsModal'); closeModal('profileMenuModal')">Rate Us</button>
+                <button onclick="showModal('uploadCardModal'); closeModal('profileMenuModal')">Upload Card</button>
+                <button onclick="showModal('helpModal'); closeModal('profileMenuModal')">Help</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('profileModal')">&times;</span>
+            <h2>Complete Your Profile</h2>
+            <form id="profileForm">
+                <label for="profilePhotoUpload">Profile Photo:</label>
+                <input type="file" id="profilePhotoUpload">
+                <label for="profileName">Name:</label>
+                <input type="text" id="profileName" required>
+                <label for="profileSex">Sex:</label>
+                <select id="profileSex" required>
+                    <option value="">Select Sex</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <label for="profileDob">Date of Birth:</label>
+                <input type="date" id="profileDob" onchange="calculateAge()" required>
+                <label for="profileAge">Age:</label>
+                <input type="text" id="profileAge" readonly>
+                <label for="profileFatherName">Father's Name:</label>
+                <input type="text" id="profileFatherName" required>
+                <label for="profileAddress">Address:</label>
+                <textarea id="profileAddress" required></textarea>
+                <label for="profilePincode">Pincode:</label>
+                <input type="text" id="profilePincode" required>
+                <label for="profilePhone">Phone No.:</label>
+                <input type="text" id="profilePhone" required>
+                <button type="submit">Save Profile</button>
+            </form>
+            <div id="profileMessage" class="form-message"></div>
+        </div>
+    </div>
+
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('feedbackModal')">&times;</span>
+            <h2>Feedback</h2>
+            <form id="feedbackForm">
+                <label for="feedbackName">Name:</label>
+                <input type="text" id="feedbackName" required>
+                <label for="feedbackMobile">Mobile No.:</label>
+                <input type="text" id="feedbackMobile" required>
+                <label for="feedbackEmail">Email:</label>
+                <input type="email" id="feedbackEmail" required>
+                <label for="feedbackText">Write Feedback:</label>
+                <textarea id="feedbackText" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+            <div id="feedbackMessage" class="form-message"></div>
+        </div>
+    </div>
+
+    <div id="rateUsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('rateUsModal')">&times;</span>
+            <h2>Rate Us</h2>
+            <div class="stars" style="text-align: center; margin-bottom: 15px;">
+                <i class="fas fa-star" data-rating="1"></i>
+                <i class="fas fa-star" data-rating="2"></i>
+                <i class="fas fa-star" data-rating="3"></i>
+                <i class="fas fa-star" data-rating="4"></i>
+                <i class="fas fa-star" data-rating="5"></i>
+            </div>
+            <form id="rateUsForm">
+                <label for="rateUsComment">Comment (Optional):</label>
+                <textarea id="rateUsComment"></textarea>
+                <button type="submit">Submit</button>
+            </form>
+            <div id="rateUsMessage" class="form-message"></div>
+        </div>
+    </div>
+
+    <div id="uploadCardModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('uploadCardModal')">&times;</span>
+            <h2>Upload Card</h2>
+            <div class="modal-btn-group" style="flex-direction: column;">
+                <button onclick="showCardForm('ayushman')">Ayushman Card</button>
+                <button onclick="showCardForm('other')">Other Card</button>
+            </div>
+            <div id="ayushmanCardForm" style="display: none;">
+                <form id="ayushmanCardFormElement">
+                    <label for="ayushmanCardNo">Card No.:</label>
+                    <input type="text" id="ayushmanCardNo" required>
+                    <label for="ayushmanPhoto">Upload Photo:</label>
+                    <input type="file" id="ayushmanPhoto" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div id="otherCardForm" style="display: none;">
+                <form id="otherCardFormElement">
+                    <label for="otherCardName">Card Name:</label>
+                    <input type="text" id="otherCardName" required>
+                    <label for="otherCardNo">Card No.:</label>
+                    <input type="text" id="otherCardNo" required>
+                    <label for="otherCardPhoto">Upload Photo:</label>
+                    <input type="file" id="otherCardPhoto" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div id="cardUploadMessage" class="form-message"></div>
+        </div>
+    </div>
+
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('helpModal')">&times;</span>
+            <h2>Help</h2>
+            <p>Currently available options:</p>
+            <a href="tel:1234567890" class="modal-btn" style="text-align: center; padding: 12px; background-color: var(--primary-color); color: #fff; border-radius: 8px; text-decoration: none;">Call Us</a>
+        </div>
+    </div>
+
+    <div id="onlineDoctorModal" class="modal">
+        
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('onlineDoctorModal')">&times;</span>
+            
+<label for="consultLanguage"><b>Consultancy Language:</b></label>
+<select id="consultLanguage" required>
+  <option value="">Select Language</option>
+  <option value="hindi">हिन्दी</option>
+  <option value="english">English</option>
+  <option value="punjabi">ਪੰਜਾਬੀ</option>
+  <option value="marathi">मराठी</option>
+</select>
+
+            <h2>Online Doctor Consultation</h2>
+            <div id="onlineDoctorOptions">
+                <button onclick="showAppointmentForm('me')">Appointment for Me</button>
+                <button onclick="showAppointmentForm('other')">Appointment for Other</button>
+            </div>
+            <div id="appointmentForMeForm" style="display:none;">
+                <form id="appointmentForMeFormElement">
+                    <label for="myDisease">Disease:</label>
+                    <input type="text" id="myDisease" required>
+                    <label for="myApptDate">Date:</label>
+                    <input type="date" id="myApptDate" required>
+                    <label for="myApptTime">Time:</label>
+                    <input type="time" id="myApptTime" required>
+                    <button type="submit">Book Appointment</button>
+                </form>
+            </div>
+            <div id="appointmentForOtherForm" style="display:none;">
+                <form id="appointmentForOtherFormElement">
+                    <label for="otherCategory">Category:</label>
+                    <select id="otherCategory" required>
+                        <option value="Child">Child</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label for="otherName">Name:</label>
+                    <input type="text" id="otherName" required>
+                    <label for="otherSex">Sex:</label>
+                    <select id="otherSex" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label for="otherDob">Date of Birth:</label>
+                    <input type="date" id="otherDob" required>
+                    <label for="otherDisease">Disease:</label>
+                    <input type="text" id="otherDisease" required>
+                    <label for="otherApptDate">Date:</label>
+                    <input type="date" id="otherApptDate" required>
+                    <label for="otherApptTime">Time:</label>
+                    <input type="time" id="otherApptTime" required>
+                    <label for="otherMedlinkId">Medlink ID (Optional):</label>
+                    <input type="text" id="otherMedlinkId">
+                    <button type="submit">Book Appointment</button>
+                </form>
+            </div>
+            <div id="bookedAppointments" style="margin-top: 20px;">
+                <h3>Booked Appointments</h3>
+                <div id="bookedAppointmentsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="prescriptionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('prescriptionModal')">&times;</span>
+            <h2>Prescriptions</h2>
+            <div id="prescriptionList">
+                <div class="prescription-item" style="padding: 15px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px;">
+                    <h4>Dr. A.K. Sharma - 12 Dec 2024</h4>
+                    <p>Fever and Cold</p>
+                    <a href="https://example.com/dummy-prescription-1.pdf" target="_blank" style="text-decoration: none; color: var(--primary-color);">View Prescription (PDF)</a>
+                </div>
+                <div class="prescription-item" style="padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+                    <h4>Dr. Ritu Singh - 15 Nov 2024</h4>
+                    <p>Routine Check-up</p>
+                    <a href="https://example.com/dummy-prescription-2.pdf" target="_blank" style="text-decoration: none; color: var(--primary-color);">View Prescription (PDF)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="medicalStoreModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('medicalStoreModal')">&times;</span>
+            <h2>Medical Store Locator</h2>
+            <form id="uploadPrescriptionForm" style="margin-bottom: 20px;">
+                <label for="prescriptionUpload">Upload Prescription:</label>
+                <input type="file" id="prescriptionUpload">
+                <button type="submit">Find Medicine</button>
+            </form>
+            <div id="medicalStoreList">
+                <h3>Nearby Stores</h3>
+                <div class="store-item" style="padding: 10px; border-bottom: 1px solid #eee;">
+                    <h4>Sharma Medicals</h4>
+                    <p>1.5 km away</p>
+                    <a href="https://maps.google.com/?q=Sharma+Medicals" target="_blank" class="button">Get Directions</a>
+                </div>
+                <div class="store-item" style="padding: 10px; border-bottom: 1px solid #eee;">
+                    <h4>City Pharmacy</h4>
+                    <p>2.1 km away</p>
+                    <a href="https://maps.google.com/?q=City+Pharmacy" target="_blank" class="button">Get Directions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('transactionModal')">&times;</span>
+            <h2>Transactions</h2>
+            <div id="transactionList">
+                <div class="transaction-item completed">
+                    <div>
+                        <p><strong>Consultation Fee</strong></p>
+                        <small>22 Dec 2024</small>
+                    </div>
+                    <span>+₹500</span>
+                </div>
+                <div class="transaction-item pending">
+                    <div>
+                        <p><strong>Lab Test Payment</strong></p>
+                        <small>18 Dec 2024</small>
+                    </div>
+                    <span>-₹800</span>
+                </div>
+                <div class="transaction-item refunded">
+                    <div>
+                        <p><strong>Refund: Appointment</strong></p>
+                        <small>10 Dec 2024</small>
+                    </div>
+                    <span>+₹300</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="offlineAppointmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('offlineAppointmentModal')">&times;</span>
+            <h2>Offline Appointment</h2>
+            <div id="offlineAppointmentContent">
+                <form id="offlineAppointmentForm">
+                    <label for="hospitalName">Hospital:</label>
+                    <select id="hospitalName" required>
+                        <option value="">Select Hospital</option>
+                        <option value="City Hospital">City Hospital</option>
+                        <option value="District Hospital">District Hospital</option>
+                    </select>
+                    <label for="offlineApptDate">Date:</label>
+                    <input type="date" id="offlineApptDate" required>
+                    <label for="offlineApptTime">Time:</label>
+                    <input type="time" id="offlineApptTime" required>
+                    <label for="offlineApptName">Name:</label>
+                    <input type="text" id="offlineApptName" required>
+                    <label for="offlineApptAge">Age:</label>
+                    <input type="number" id="offlineApptAge" required>
+                    <label for="offlineApptSex">Sex:</label>
+                    <select id="offlineApptSex" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label for="offlineApptDisease">Disease/Category:</label>
+                    <input type="text" id="offlineApptDisease" required>
+                    <button type="submit">Book Appointment</button>
+                </form>
+                <div id="bookedOfflineAppointments" style="margin-top: 20px;">
+                    <h3>Your Booked Appointments</h3>
+                    <div id="offlineAppointmentList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bloodReportModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('bloodReportModal')">&times;</span>
+            <h2>Blood Reports</h2>
+            <div id="bloodReportList">
+                <div class="blood-report-item">
+                    <h4>CBC Report - 20 Nov 2024</h4>
+                    <p>Hemoglobin: 14.5 g/dL (Normal)</p>
+                    <a href="https://example.com/dummy-blood-report-1.pdf" target="_blank" style="text-decoration: none; color: var(--primary-color);">View Full Report (PDF)</a>
+                </div>
+                <div class="blood-report-item">
+                    <h4>Glucose Report - 10 Oct 2024</h4>
+                    <p>Fasting Glucose: 95 mg/dL (Normal)</p>
+                    <a href="https://example.com/dummy-blood-report-2.pdf" target="_blank" style="text-decoration: none; color: var(--primary-color);">View Full Report (PDF)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="healthMeterModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('healthMeterModal')">&times;</span>
+    <h2>📊 Health Meter</h2>
+    <canvas id="healthChart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const ctx = document.getElementById('healthChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Fitness', 'Diet', 'Sleep', 'Stress'],
+        datasets: [{
+          data: [40, 30, 20, 10],
+          backgroundColor: ['#4ade80','#60a5fa','#facc15','#f87171']
+        }]
+      }
+    });
+  });
+</script>
+<div id="medicineDeliveryModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('medicineDeliveryModal')">&times;</span>
+    <h2>💊 Medicine Delivery</h2>
+    <div style="display:flex; gap:15px; flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <img src="https://via.placeholder.com/80" alt="Paracetamol"><br>
+        <p>Paracetamol</p>
+        <button>Order</button>
+      </div>
+      <div style="text-align:center;">
+        <img src="https://via.placeholder.com/80" alt="Vitamin C"><br>
+        <p>Vitamin C</p>
+        <button>Order</button>
+      </div>
+      <div style="text-align:center;">
+        <img src="https://via.placeholder.com/80" alt="Antibiotic"><br>
+        <p>Antibiotic</p>
+        <button>Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="medicineReminderModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('medicineReminderModal')">&times;</span>
+    <h2>⏰ Medicine Reminder</h2>
+    <label>Upload Prescription (PDF):</label>
+    <input type="file" accept="application/pdf"><br><br>
+    <label>Set Reminder Time:</label>
+    <input type="time" id="reminderTime">
+    <button onclick="alert('Reminder set at '+document.getElementById('reminderTime').value)">Set Reminder</button>
+  </div>
+</div>
+
+
+    <div id="bloodDonationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('bloodDonationModal')">&times;</span>
+            <h2>Blood Donation</h2>
+            <form id="bloodDonationForm">
+                <label for="donorName">Name:</label>
+                <input type="text" id="donorName" required>
+                <label for="donorSex">Sex:</label>
+                <select id="donorSex" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <label for="donorDob">Date of Birth:</label>
+                <input type="date" id="donorDob" required onchange="validateAge()">
+                <label for="donorAge">Age:</label>
+                <input type="text" id="donorAge" readonly>
+                <label for="bloodGroup">Blood Group (Optional):</label>
+                <input type="text" id="bloodGroup">
+                <label>Are you HIV/AIDS positive?</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <label><input type="radio" name="hivStatus" value="yes" required> Yes</label>
+                    <label><input type="radio" name="hivStatus" value="no" required> No</label>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+            <div id="donationMessage" class="form-message"></div>
+        </div>
+    </div>
+
+    <div id="ngoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('ngoModal')">&times;</span>
+            <h2>NGOs</h2>
+            <div id="ngoList">
+                <div class="ngo-item" style="padding: 15px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px;">
+                    <h4>Seva Bharti</h4>
+                    <p>Focuses on rural healthcare and education.</p>
+                    <a href="#" class="button">Support</a>
+                </div>
+                <div class="ngo-item" style="padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+                    <h4>Doctors for India</h4>
+                    <p>Provides free medical camps in remote villages.</p>
+                    <a href="#" class="button">Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="emergency-btn" onclick="toggleEmergencyOptions()">
+        <i class="fas fa-ambulance"></i>
+    </div>
+    <div id="emergencyOptions">
+        <a href="tel:108" class="emergency-option">
+            <i class="fas fa-phone-alt"></i> Call Ambulance
+        </a>
+        <a href="tel:112" class="emergency-option">
+            <i class="fas fa-phone-alt"></i> Police Help
+        </a>
+    </div>
+
+    <script>
+        const slogans = [
+            'Your Health, Our Priority',
+            'Caring for Rural India',
+            'Healthcare at Your Fingertips',
+            'Connect, Consult, Care',
+            'A Step Towards a Healthier Village'
+        ];
+        let currentSloganIndex = 0;
+        const sloganElement = document.querySelector('.slogan-display');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        const mainPage = document.getElementById('mainPage');
+        const loginPage = document.getElementById('loginPage');
+        const citizenLoginBtn = document.getElementById('citizenLoginBtn');
+        const backBtn = document.getElementById('backBtn');
+        const langToggleBtn = document.getElementById('langToggleBtn');
+
+        const translation = {
+            en: {
+                slogan: ['Your Health, Our Priority', 'Caring for Rural India', 'Healthcare at Your Fingertips', 'Connect, Consult, Care', 'A Step Towards a Healthier Village'],
+                greetingHeading: 'Welcome, User!',
+                greetingSlogan: 'Your health is our priority.',
+                searchPlaceholder: 'Search Doctor, Lab, etc...',
+                onlineDoctorTitle: 'Online Doctor',
+                onlineDoctorDesc: 'Consult a doctor now',
+                prescriptionsTitle: 'Prescriptions',
+                prescriptionsDesc: 'View your prescriptions',
+                medicalStoreTitle: 'Medical Store Locator',
+                medicalStoreDesc: 'Find nearby stores',
+                bloodReportTitle: 'Blood Report',
+                bloodReportDesc: 'View your lab results',
+                transactionsTitle: 'Transactions',
+                transactionsDesc: 'Check your payments',
+                offlineApptTitle: 'Offline Appointment',
+                offlineApptDesc: 'Book an appointment',
+                bloodDonationTitle: 'Blood Donation',
+                bloodDonationDesc: 'Donate blood, save lives',
+                ngoTitle: 'NGO',
+                ngoDesc: 'Support local NGOs',
+                upcomingCamps: 'Upcoming Blood Donation Camps',
+                healthReels: 'Health Awareness Reels',
+                schemes: 'Government Schemes',
+                homeNav: 'Home',
+                schemesNav: 'Schemes',
+                healthTipsNav: 'Health Tips',
+                donateNav: 'Donate',
+                loginAsCitizen: 'Login as a Citizen',
+                loginAsDoctor: 'Login as a Doctor',
+                applyAsConsultant: 'Apply as a Consultant',
+                alreadyAPart: 'Already a part',
+                profileMenu: 'Profile Menu',
+                completeProfile: 'Complete Your Profile',
+                feedback: 'Feedback',
+                donation: 'Donation',
+                rateUs: 'Rate Us',
+                uploadCard: 'Upload Card',
+                logout: 'Logout',
+                help: 'Help',
+                saveProfile: 'Save Profile',
+                submit: 'Submit',
+                submitForVerification: 'Submit for Verification',
+                onlineDoctorConsultation: 'Online Doctor Consultation',
+                apptForMe: 'Appointment for Me',
+                apptForOther: 'Appointment for Other',
+                bookAppt: 'Book Appointment',
+                bookedAppts: 'Booked Appointments',
+                prescriptions: 'Prescriptions',
+                medicalStoreLocator: 'Medical Store Locator',
+                transactions: 'Transactions',
+                offlineAppointment: 'Offline Appointment',
+                bloodReports: 'Blood Reports',
+                bloodDonation: 'Blood Donation',
+                ngos: 'NGOs',
+                callUs: 'Call Us',
+                currentlyAvailable: 'Currently available options:'
+            },
+            hi: {
+                slogan: ['आपकी सेहत, हमारी प्राथमिकता', 'ग्रामीण भारत की देखभाल', 'स्वास्थ्य सेवा आपकी उंगलियों पर', 'जुड़ें, सलाह लें, देखभाल करें', 'एक स्वस्थ गाँव की ओर एक कदम'],
+                greetingHeading: 'आपका स्वागत है, उपयोगकर्ता!',
+                greetingSlogan: 'आपकी सेहत हमारी प्राथमिकता है।',
+                searchPlaceholder: 'डॉक्टर, लैब, आदि खोजें...',
+                onlineDoctorTitle: 'ऑनलाइन डॉक्टर',
+                onlineDoctorDesc: 'अभी डॉक्टर से सलाह लें',
+                prescriptionsTitle: 'नुस्खे',
+                prescriptionsDesc: 'अपने नुस्खे देखें',
+                medicalStoreTitle: 'मेडिकल स्टोर खोजक',
+                medicalStoreDesc: 'आस-पास के स्टोर खोजें',
+                bloodReportTitle: 'ब्लड रिपोर्ट',
+                bloodReportDesc: 'अपने लैब परिणाम देखें',
+                transactionsTitle: 'लेन-देन',
+                transactionsDesc: 'अपने भुगतान की जाँच करें',
+                offlineApptTitle: 'ऑफलाइन अपॉइंटमेंट',
+                offlineApptDesc: 'अपॉइंटमेंट बुक करें',
+                bloodDonationTitle: 'रक्तदान',
+                bloodDonationDesc: 'रक्तदान करें, जीवन बचाएं',
+                ngoTitle: 'एनजीओ',
+                ngoDesc: 'स्थानीय एनजीओ का समर्थन करें',
+                upcomingCamps: 'आगामी रक्तदान शिविर',
+                healthReels: 'स्वास्थ्य जागरूकता रील्स',
+                schemes: 'सरकारी योजनाएं',
+                homeNav: 'होम',
+                schemesNav: 'योजनाएं',
+                healthTipsNav: 'स्वास्थ्य सुझाव',
+                donateNav: 'दान करें',
+                loginAsCitizen: 'नागरिक के रूप में लॉगिन करें',
+                loginAsDoctor: 'डॉक्टर के रूप में लॉगिन करें',
+                applyAsConsultant: 'सलाहकार के रूप में आवेदन करें',
+                alreadyAPart: 'पहले से ही एक हिस्सा हैं',
+                profileMenu: 'प्रोफ़ाइल मेनू',
+                completeProfile: 'अपनी प्रोफ़ाइल पूरी करें',
+                feedback: 'प्रतिक्रिया',
+                donation: 'दान',
+                rateUs: 'हमें रेट करें',
+                uploadCard: 'कार्ड अपलोड करें',
+                logout: 'लॉग आउट',
+                help: 'सहायता',
+                saveProfile: 'प्रोफ़ाइल सहेजें',
+                submit: 'जमा करें',
+                submitForVerification: 'सत्यापन के लिए जमा करें',
+                onlineDoctorConsultation: 'ऑनलाइन डॉक्टर परामर्श',
+                apptForMe: 'मेरे लिए अपॉइंटमेंट',
+                apptForOther: 'अन्य के लिए अपॉइंटमेंट',
+                bookAppt: 'अपॉइंटमेंट बुक करें',
+                bookedAppts: 'बुक किए गए अपॉइंटमेंट',
+                prescriptions: 'नुस्खे',
+                medicalStoreLocator: 'मेडिकल स्टोर खोजक',
+                transactions: 'लेन-देन',
+                offlineAppointment: 'ऑफलाइन अपॉइंटमेंट',
+                bloodReports: 'ब्लड रिपोर्ट',
+                bloodDonation: 'रक्तदान',
+                ngos: 'एनजीओ',
+                callUs: 'हमें कॉल करें',
+                currentlyAvailable: 'वर्तमान में उपलब्ध विकल्प:'
+            }
+        };
+
+        let currentLang = 'en';
+        let viewHistory = [];
+
+        function updateContent(lang) {
+            const t = translation[lang];
+            sloganElement.textContent = t.slogan[currentSloganIndex];
+            document.getElementById('greetingHeading').textContent = t.greetingHeading;
+            document.getElementById('greetingSlogan').textContent = t.greetingSlogan;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('onlineDoctorBtn').querySelector('.feature-title').textContent = t.onlineDoctorTitle;
+            document.getElementById('onlineDoctorBtn').querySelector('p').textContent = t.onlineDoctorDesc;
+            document.getElementById('prescriptionBtn').querySelector('.feature-title').textContent = t.prescriptionsTitle;
+            document.getElementById('prescriptionBtn').querySelector('p').textContent = t.prescriptionsDesc;
+            document.getElementById('medicalStoreLocatorBtn').querySelector('.feature-title').textContent = t.medicalStoreTitle;
+            document.getElementById('medicalStoreLocatorBtn').querySelector('p').textContent = t.medicalStoreDesc;
+            document.getElementById('bloodReportBtn').querySelector('.feature-title').textContent = t.bloodReportTitle;
+            document.getElementById('bloodReportBtn').querySelector('p').textContent = t.bloodReportDesc;
+            document.getElementById('transactionBtn').querySelector('.feature-title').textContent = t.transactionsTitle;
+            document.getElementById('transactionBtn').querySelector('p').textContent = t.transactionsDesc;
+            document.getElementById('offlineAppointmentBtn').querySelector('.feature-title').textContent = t.offlineApptTitle;
+            document.getElementById('offlineAppointmentBtn').querySelector('p').textContent = t.offlineApptDesc;
+            document.getElementById('bloodDonationBtn').querySelector('.feature-title').textContent = t.bloodDonationTitle;
+            document.getElementById('bloodDonationBtn').querySelector('p').textContent = t.bloodDonationDesc;
+            document.getElementById('ngoBtn').querySelector('.feature-title').textContent = t.ngoTitle;
+            document.getElementById('ngoBtn').querySelector('p').textContent = t.ngoDesc;
+            document.querySelector('.upcoming-camps h3').textContent = t.upcomingCamps;
+            document.querySelector('.health-reels-section h3').textContent = t.healthReels;
+            document.querySelector('.schemes-section h3').textContent = t.schemes;
+            document.querySelector('[data-section="home"] span').textContent = t.homeNav;
+            document.querySelector('[data-section="schemes"] span').textContent = t.schemesNav;
+            document.querySelector('[data-section="health-tips"] span').textContent = t.healthTipsNav;
+            document.querySelector('[data-section="donation"] span').textContent = t.donateNav;
+            document.getElementById('citizenLoginBtn').textContent = t.loginAsCitizen;
+            document.getElementById('langToggleBtn').textContent = lang === 'en' ? 'हिन्दी' : 'English';
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'hi' : 'en';
+            updateContent(currentLang);
+        }
+
+        function updateSlogan() {
+            sloganElement.classList.add('fade-out');
+            setTimeout(() => {
+                currentSloganIndex = (currentSloganIndex + 1) % slogans.length;
+                sloganElement.textContent = translation[currentLang].slogan[currentSloganIndex];
+                sloganElement.classList.remove('fade-out');
+            }, 500);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const istTime = now.toLocaleString('en-IN', options);
+            document.getElementById('ist-clock').textContent = istTime;
+        }
+
+        function showDoctorLoginOptions() {
+            document.getElementById('mainLoginOptions').style.display = 'none';
+            document.getElementById('doctorSubOptions').style.display = 'flex';
+        }
+
+        function showConsultantForm() {
+            document.getElementById('doctorSubOptions').style.display = 'none';
+            document.getElementById('consultantForm').style.display = 'flex';
+        }
+
+        function showDoctorLoginForm() {
+            document.getElementById('doctorSubOptions').style.display = 'none';
+            document.getElementById('doctorLoginForm').style.display = 'flex';
+        }
+
+        function showMainPage() {
+            loginPage.style.display = 'none';
+            mainPage.style.display = 'block';
+            document.querySelector('.bottom-nav').style.display = 'flex';
+            showSection('home');
+        }
+
+        function showModal(modalId) {
+            viewHistory.push(modalId);
+            document.getElementById(modalId).style.display = 'flex';
+            document.getElementById('backBtn').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            viewHistory.pop();
+            if (viewHistory.length === 0) {
+                document.getElementById('backBtn').style.display = 'none';
+            }
+        }
+        
+        function goBack() {
+            if (viewHistory.length > 0) {
+                const currentPage = viewHistory.pop();
+                document.getElementById(currentPage).style.display = 'none';
+                if (viewHistory.length > 0) {
+                    const previousPage = viewHistory[viewHistory.length - 1];
+                    document.getElementById(previousPage).style.display = 'flex';
+                } else {
+                    document.getElementById('backBtn').style.display = 'none';
+                }
+
+            }
+        }
+        
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(`${sectionId}Section`).style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector(`.nav-item[data-section="${sectionId}"]`).classList.add('active');
+            viewHistory = [];
+            document.getElementById('backBtn').style.display = 'none';
+        }
+
+        function toggleEmergencyOptions() {
+            const options = document.getElementById('emergencyOptions');
+            options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function showProfileMenu() {
+            showModal('profileMenuModal');
+        }
+
+        function calculateAge() {
+            const dob = new Date(document.getElementById('profileDob').value);
+            const today = new Date();
+            const age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                document.getElementById('profileAge').value = age - 1;
+            } else {
+                document.getElementById('profileAge').value = age;
+            }
+        }
+
+        function validateAge() {
+            const dobInput = document.getElementById('donorDob');
+            const ageInput = document.getElementById('donorAge');
+            const dob = new Date(dobInput.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            ageInput.value = age;
+            if (age < 18) {
+                document.getElementById('donationMessage').textContent = 'Invalid input. Only 18+ can donate.';
+                document.getElementById('donationMessage').classList.add('error');
+            } else {
+                document.getElementById('donationMessage').textContent = '';
+                document.getElementById('donationMessage').classList.remove('error');
+            }
+        }
+
+        function showCardForm(cardType) {
+            document.getElementById('ayushmanCardForm').style.display = 'none';
+            document.getElementById('otherCardForm').style.display = 'none';
+            if (cardType === 'ayushman') {
+                document.getElementById('ayushmanCardForm').style.display = 'block';
+            } else {
+                document.getElementById('otherCardForm').style.display = 'block';
+            }
+        }
+
+        function showAppointmentForm(type) {
+            document.getElementById('onlineDoctorOptions').style.display = 'none';
+            document.getElementById('appointmentForMeForm').style.display = 'none';
+            document.getElementById('appointmentForOtherForm').style.display = 'none';
+            if (type === 'me') {
+                document.getElementById('appointmentForMeForm').style.display = 'block';
+            } else {
+                document.getElementById('appointmentForOtherForm').style.display = 'block';
+            }
+        }
+
+      
+        function handleProfileSave(event) {
+            event.preventDefault();
+            const medlinkId = 'MED' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('profileMessage').textContent = `Profile saved! Your Medlink ID is: ${medlinkId}`;
+            document.getElementById('profileMessage').classList.add('success');
+        }
+
+        function handleFeedbackSubmit(event) {
+            event.preventDefault();
+            document.getElementById('feedbackMessage').textContent = 'Thank you for your feedback!';
+            document.getElementById('feedbackMessage').classList.add('success');
+            document.getElementById('feedbackForm').reset();
+        }
+
+        function handleRateUsSubmit(event) {
+            event.preventDefault();
+            document.getElementById('rateUsMessage').textContent = 'Thank you for rating us!';
+            document.getElementById('rateUsMessage').classList.add('success');
+            document.getElementById('rateUsForm').reset();
+        }
+
+        function handleCardUpload(event) {
+            event.preventDefault();
+            document.getElementById('cardUploadMessage').textContent = 'Card uploaded successfully!';
+            document.getElementById('cardUploadMessage').classList.add('success');
+        }
+
+        function handleOnlineAppt(event, isForMe) {
+            event.preventDefault();
+            const form = event.target;
+
+            const name = isForMe ? 'User' : form.querySelector('input[type="text"]').value;
+            const date = form.querySelector('input[type="date"]').value;
+            const time = form.querySelector('input[type="time"]').value;
+            const disease = form.querySelector('input[type="text"]').value;
+
+            const appointmentList = document.getElementById('bookedAppointmentsList');
+            const appointmentDiv = document.createElement('div');
+            appointmentDiv.classList.add('appointment-item');
+            appointmentDiv.innerHTML = `
+                <div>
+                    <p><strong>Appointment with Dr. Jane Doe</strong></p>
+                    <small>Date: ${date}, Time: ${time}</small><br>
+                    <small>For: ${name}, Reason: ${disease}</small>
+                </div>
+                <a href="https://meet.google.com/xyz-123" target="_blank" class="join-btn">Join Meeting</a>
+            `;
+            appointmentList.appendChild(appointmentDiv);
+            alert('Appointment Booked! Meeting link has been generated.');
+            closeModal('onlineDoctorModal');
+        }
+        
+        function handleOfflineAppt(event) {
+            event.preventDefault();
+            const form = event.target;
+            const hospital = form.querySelector('#hospitalName').value;
+            const date = form.querySelector('#offlineApptDate').value;
+            const time = form.querySelector('#offlineApptTime').value;
+            const name = form.querySelector('#offlineApptName').value;
+
+            const appointmentList = document.getElementById('offlineAppointmentList');
+            const appointmentDiv = document.createElement('div');
+            appointmentDiv.classList.add('hospital-card');
+            appointmentDiv.innerHTML = `
+                <p><strong>Hospital: ${hospital}</strong></p>
+                <p>Date: ${date}, Time: ${time}</p>
+                <p>Patient: ${name}</p>
+                <p>Status: Booked</p>
+            `;
+            appointmentList.appendChild(appointmentDiv);
+            alert('Offline Appointment Booked!');
+            closeModal('offlineAppointmentModal');
+        }
+
+        function handleDonationSubmit(event) {
+            event.preventDefault();
+            alert('Thank you for your donation!');
+            closeModal('donationModal');
+        }
+        
+        function handleBloodDonationSubmit(event) {
+            event.preventDefault();
+            const age = parseInt(document.getElementById('donorAge').value);
+            if (age < 18) {
+                document.getElementById('donationMessage').textContent = 'Invalid input. Only 18+ can donate.';
+                document.getElementById('donationMessage').classList.add('error');
+            } else {
+                document.getElementById('donationMessage').textContent = 'Thank you for your willingness to donate blood!';
+                document.getElementById('donationMessage').classList.add('success');
+            }
+        }
+        
+        function handleUploadPrescription(event) {
+            event.preventDefault();
+            alert('Looking for stores with your prescribed medicines. Showing dummy data for now.');
+        }
+
+        // Attach event listeners
+        document.getElementById('profileForm').addEventListener('submit', handleProfileSave);
+        document.getElementById('feedbackForm').addEventListener('submit', handleFeedbackSubmit);
+        document.getElementById('rateUsForm').addEventListener('submit', handleRateUsSubmit);
+        document.getElementById('ayushmanCardFormElement').addEventListener('submit', handleCardUpload);
+        document.getElementById('otherCardFormElement').addEventListener('submit', handleCardUpload);
+        document.getElementById('appointmentForMeFormElement').addEventListener('submit', (e) => handleOnlineAppt(e, true));
+        document.getElementById('appointmentForOtherFormElement').addEventListener('submit', (e) => handleOnlineAppt(e, false));
+        document.getElementById('offlineAppointmentForm').addEventListener('submit', handleOfflineAppt);
+        document.getElementById('bloodDonationForm').addEventListener('submit', handleBloodDonationSubmit);
+        document.getElementById('uploadPrescriptionForm').addEventListener('submit', handleUploadPrescription);
+        
+        document.querySelectorAll('.stars i').forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = star.dataset.rating;
+                document.querySelectorAll('.stars i').forEach(s => {
+                    s.classList.remove('active');
+                });
+                for (let i = 0; i < rating; i++) {
+                    document.querySelectorAll('.stars i')[i].classList.add('active');
+                }
+            });
+        });
+
+        
+        setInterval(updateSlogan, 3000);
+        setInterval(updateClock, 1000);
+        updateSlogan();
+        updateClock();
+        
+        
+        citizenLoginBtn.addEventListener('click', () => {
+            showMainPage();
+        });
+
+        darkModeToggle.addEventListener('change', () => {
+            body.classList.toggle('dark-mode', darkModeToggle.checked);
+        });
+
+        
+        document.getElementById('signupBtn').addEventListener('click', function() {
+            showModal('signupModal');
+        });
+
+        
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('signupMessage').textContent = 'Signup successful! You can now login.';
+            document.getElementById('signupMessage').classList.add('success');
+            setTimeout(() => {
+                closeModal('signupModal');
+                document.getElementById('signupForm').reset();
+                document.getElementById('signupMessage').textContent = '';
+                document.getElementById('signupMessage').classList.remove('success');
+            }, 1500);
+        });
+
+        
+        const globalBackBtn = document.getElementById('globalBackBtn');
+        function updateGlobalBackBtn() {
+            let modalOpen = document.querySelector('.modal[style*="display: flex"]');
+            let notHome = false;
+            document.querySelectorAll('.content-section').forEach(section => {
+                if (section.style.display === 'block' && section.id !== 'homeSection') notHome = true;
+            });
+            if (modalOpen || notHome) {
+                globalBackBtn.style.display = 'block';
+            } else {
+                globalBackBtn.style.display = 'none';
+            }
+        }
+
+        const origShowModal = showModal;
+        showModal = function(modalId) {
+            origShowModal(modalId);
+            updateGlobalBackBtn();
+        };
+        const origCloseModal = closeModal;
+        closeModal = function(modalId) {
+            origCloseModal(modalId);
+            updateGlobalBackBtn();
+        };
+        const origShowSection = showSection;
+        showSection = function(sectionId) {
+            origShowSection(sectionId);
+            updateGlobalBackBtn();
+        };
+        const origGoBack = goBack;
+        goBack = function() {
+            origGoBack();
+            updateGlobalBackBtn();
+        };
+
+        globalBackBtn.addEventListener('click', function() {
+            let openModal = Array.from(document.querySelectorAll('.modal')).find(m => m.style.display === 'flex');
+            if (openModal) {
+                closeModal(openModal.id);
+                return;
+            }
+           
+            let notHome = false;
+            document.querySelectorAll('.content-section').forEach(section => {
+                if (section.style.display === 'block' && section.id !== 'homeSection') notHome = true;
+            });
+            if (notHome) {
+                showSection('home');
+            }
+        });
+
+        updateGlobalBackBtn();
+
+        (function(){
+            const botName = "AI Chikitsak";
+            const responses = {
+                "i have cold": {
+                    en: "It seems you have a cold. Drink plenty of fluids, rest, and consider steam inhalation. If required, take Acetaminophen. If symptoms persist, consult a doctor.",
+                    hi: "ऐसा लगता है कि आपको सर्दी है। खूब पानी पिएं, आराम करें और भाप लें। आवश्यकता हो तो एसिटामिनोफेन लें। अगर लक्षण बने रहें तो डॉक्टर से मिलें।",
+                    "hi-en": "Aapko sardi ho gayi hai. Pani jyada piyen, aaram karein aur bhaap lein. Zarurat ho toh Acetaminophen lein. Agar symptoms rahein toh doctor se milen."
+                },
+                "i am not feeling well": {
+                    en: "I'm sorry to hear that. Can you describe your symptoms in detail?",
+                    hi: "मुझे खेद है कि आप अच्छा महसूस नहीं कर रहे हैं। कृपया अपने लक्षणों का विवरण दे सकते हैं?",
+                    "hi-en": "Mujhe afsos hai ki aap thik nahi mehsoos kar rahe hain. Kya aap apne lakshan ka vivaran de sakte hain?"
+                },
+                "i have headache": {
+                    en: "For headache, rest in a quiet place and drink water. If pain is severe or frequent, consult a doctor.",
+                    hi: "सिरदर्द के लिए, शांत जगह पर आराम करें और पानी पिएं। अगर दर्द ज्यादा है या बार-बार होता है, तो डॉक्टर से मिलें।",
+                    "hi-en": "Sir dard ke liye, shaant jagah par aaram karein aur pani piyen. Agar dard jyada ho ya baar-baar ho, toh doctor se milen."
+                },
+                "i have stomach pain": {
+                    en: "Stomach pain can have many causes. Rest, avoid spicy food, and drink water. If pain is severe or with fever, consult a doctor.",
+                    hi: "पेट दर्द के कई कारण हो सकते हैं। आराम करें, तीखा खाना न खाएं और पानी पिएं। अगर दर्द तेज है या बुखार है तो डॉक्टर से मिलें।",
+                    "hi-en": "Pet dard ke kai karan ho sakte hain. Aaram karein, teekha khana na khayein aur pani piyen. Agar dard tez hai ya bukhar hai toh doctor se milen."
+                },
+                "what is diabetes?": {
+                    en: "Diabetes is a condition where blood sugar levels are too high. It can be managed with healthy diet, exercise, and medicines. Consult your doctor for proper management.",
+                    hi: "डायबिटीज़ एक ऐसी स्थिति है जिसमें रक्त शर्करा का स्तर अधिक हो जाता है। इसे स्वस्थ आहार, व्यायाम और दवाओं से नियंत्रित किया जा सकता है। उचित प्रबंधन के लिए डॉक्टर से सलाह लें।",
+                    "hi-en": "Diabetes ek aisi sthiti hai jismein blood sugar level zyada ho jata hai. Iska ilaj sahi diet, exercise aur dawaon se hota hai. Doctor se salah lein."
+                },
+                "how to control blood pressure?": {
+                    en: "To control blood pressure, reduce salt intake, exercise regularly, avoid stress, and take medicines as prescribed. Regularly monitor your BP.",
+                    hi: "ब्लड प्रेशर को नियंत्रित करने के लिए नमक कम खाएं, नियमित व्यायाम करें, तनाव से बचें और डॉक्टर की दवा लें। BP की नियमित जांच करें।",
+                    "hi-en": "Blood pressure control karne ke liye namak kam khayein, exercise karein, stress se bachen aur doctor ki dawa lein. BP ki regular janch karein."
+                },
+                "what to do in fever?": {
+                    en: "In case of fever, rest, drink fluids, and take paracetamol if needed. If fever persists for more than 3 days, consult a doctor.",
+                    hi: "बुखार होने पर आराम करें, तरल पदार्थ पिएं और जरूरत हो तो पैरासिटामोल लें। अगर बुखार 3 दिन से ज्यादा रहे तो डॉक्टर से मिलें।",
+                    "hi-en": "Bukhar hone par aaram karein, liquid piyen aur zarurat ho toh paracetamol lein. Agar bukhar 3 din se zyada rahe toh doctor se milen."
+                },
+                "what is a balanced diet?": {
+                    en: "A balanced diet includes fruits, vegetables, whole grains, proteins, and limited fats and sugars. Eat a variety of foods for good health.",
+                    hi: "संतुलित आहार में फल, सब्जियां, अनाज, प्रोटीन और सीमित वसा व शर्करा शामिल हैं। अच्छे स्वास्थ्य के लिए विविध भोजन करें।",
+                    "hi-en": "Santulit aahar mein phal, sabzi, anaj, protein aur kam tel-shakkar shamil hain. Achhe health ke liye alag-alag cheezen khayein."
+                },
+                "tell me about vaccination": {
+                    en: "Vaccination protects you from many diseases. Always take vaccines as per schedule for children and adults.",
+                    hi: "टीकाकरण आपको कई बीमारियों से बचाता है। बच्चों और बड़ों के लिए समय पर टीके जरूर लगवाएं।",
+                    "hi-en": "Vaccination aapko kai bimariyon se bachata hai. Bacchon aur badon ko samay par tika lagwayein."
+                },
+                "explain symptoms of dengue": {
+                    en: "Symptoms of dengue include high fever, headache, pain behind eyes, joint and muscle pain, rash, and mild bleeding. Consult a doctor if you suspect dengue.",
+                    hi: "डेंगू के लक्षणों में तेज बुखार, सिरदर्द, आंखों के पीछे दर्द, जोड़ों और मांसपेशियों में दर्द, चकत्ते और हल्का रक्तस्राव शामिल हैं। संदेह होने पर डॉक्टर से मिलें।",
+                    "hi-en": "Dengue ke lakshan hain tez bukhar, sir dard, aankhon ke peeche dard, jodon/manspeshiyon mein dard, daane aur halka bleeding. Shak ho toh doctor se milen."
+                }
+            };
+
+            function addMessage(text, sender, lang) {
+                const chatMessages = document.getElementById('chat-messages');
+                if (!chatMessages) return;
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'msg ' + (sender === 'user' ? 'user' : 'bot');
+                msgDiv.innerHTML = text;
+                if (sender === 'bot') {
+                    const speakBtn = document.createElement('button');
+                    speakBtn.className = 'speak-btn';
+                    speakBtn.title = 'Read Aloud';
+                    speakBtn.innerHTML = '🔊';
+                    speakBtn.onclick = () => speakText(text, lang);
+                    msgDiv.appendChild(speakBtn);
+                }
+                chatMessages.appendChild(msgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function speakText(text, lang) {
+                if (!window.speechSynthesis) return;
+                let utter = new SpeechSynthesisUtterance(text);
+                if (lang === 'hi') utter.lang = 'hi-IN';
+                else if (lang === 'hi-en') utter.lang = 'hi-IN';
+                else utter.lang = 'en-US';
+                window.speechSynthesis.speak(utter);
+            }
+
+            function startVoiceInput() {
+                const langSelect = document.getElementById('lang-select');
+                const chatInput = document.getElementById('chat-input');
+                if (!('webkitSpeechRecognition' in window)) {
+                    alert('Voice recognition not supported in this browser.');
+                    return;
+                }
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = langSelect.value === 'hi' ? 'hi-IN' : 'en-US';
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+                recognition.onresult = function(event) {
+                    chatInput.value = event.results[0][0].transcript;
+                };
+                recognition.start();
+            }
+
+            async function getBotResponse(msg, lang) {
+                let key = msg.trim().toLowerCase();
+                if (responses[key]) {
+                    return responses[key][lang] || responses[key]['en'];
+                }
+                if (lang === 'hi') return "माफ़ कीजिए, मैं आपकी मदद करने की कोशिश कर रहा हूँ। कृपया अपने लक्षण विस्तार से बताएं।";
+                if (lang === 'hi-en') return "Maaf kijiye, main aapki madad karne ki koshish kar raha hoon. Apne lakshan detail mein batayein.";
+                return "Sorry, I am trying to help. Please describe your symptoms in detail.";
+            }
+
+            async function sendMessage() {
+                const chatInput = document.getElementById('chat-input');
+                const langSelect = document.getElementById('lang-select');
+                const msg = chatInput.value.trim();
+                if (!msg) return;
+                const lang = langSelect.value;
+                addMessage(msg, 'user', lang);
+                chatInput.value = '';
+                addMessage(`<i>${botName} is typing...</i>`, 'bot', lang);
+                const botMsg = await getBotResponse(msg, lang);
+                const chatMessages = document.getElementById('chat-messages');
+                chatMessages.removeChild(chatMessages.lastChild);
+                addMessage(botMsg, 'bot', lang);
+            }
+
+            function setupChatbotEvents() {
+                const sendBtn = document.getElementById('send-btn');
+                const chatInput = document.getElementById('chat-input');
+                const voiceBtn = document.getElementById('voice-btn');
+                const preBtns = document.querySelectorAll('.pre-btn');
+
+                sendBtn.onclick = sendMessage;
+                chatInput.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') sendMessage();
+                });
+                voiceBtn.onclick = startVoiceInput;
+                preBtns.forEach(btn => {
+                    btn.onclick = () => {
+                        chatInput.value = btn.innerText;
+                        sendMessage();
+                    };
+                });
+            }
+
+   
+            let aiChikitsakInitialized = false;
+            const origShowSection = window.showSection;
+            window.showSection = function(sectionId) {
+                origShowSection(sectionId);
+                if (sectionId === 'aiChikitsak') {
+                    if (!aiChikitsakInitialized) {
+                        setTimeout(() => {
+                            setupChatbotEvents();
+                            addMessage(`Hello! I am <b>${botName}</b>, your medical assistant. How can I help you today? <br><small>नमस्ते! मैं <b>${botName}</b> हूँ, आपकी मेडिकल सहायक। आपकी कैसे मदद कर सकता हूँ?</small>`, 'bot', 'en');
+                        }, 200);
+                        aiChikitsakInitialized = true;
+                    }
+                }
+            };
+        })();
+    </script>
+
+<script>
+
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// AI Chatbot simple logic
+const sendBtn = document.getElementById("send-btn");
+const chatInput = document.getElementById("chat-input");
+const chatMessages = document.getElementById("chat-messages");
+const preBtns = document.querySelectorAll(".pre-btn");
+
+function addMessage(text, sender = "user") {
+    const msg = document.createElement("div");
+    msg.classList.add("msg", sender);
+    msg.textContent = text;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function botReply(userText) {
+    let reply = "I am still learning, but please consult a doctor for serious issues.";
+    if (userText.toLowerCase().includes("cold")) reply = "Drink warm fluids and rest. If fever persists, consult a doctor.";
+    if (userText.toLowerCase().includes("fever")) reply = "Take paracetamol and stay hydrated. Visit a doctor if temperature > 102°F.";
+    if (userText.toLowerCase().includes("headache")) reply = "Rest in a quiet room. If frequent, consult a neurologist.";
+    if (userText.toLowerCase().includes("diabetes")) reply = "Diabetes is a condition with high blood sugar. Control with diet, exercise, and medicines.";
+    
+    setTimeout(() => addMessage(reply, "bot"), 600);
+}
+
+sendBtn.addEventListener("click", () => {
+    const text = chatInput.value.trim();
+    if (text !== "") {
+        addMessage(text, "user");
+        botReply(text);
+        chatInput.value = "";
+    }
+});
+
+preBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const text = btn.innerText;
+        addMessage(text, "user");
+        botReply(text);
+    });
+});
+function speakText(text) {
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = langSelect.value === "hi" ? "hi-IN" : "en-US";
+    speechSynthesis.speak(utter);
+}
+const voiceBtn = document.getElementById("voice-btn");
+
+voiceBtn.addEventListener("click", () => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = langSelect.value === "hi" ? "hi-IN" : "en-US";
+    recognition.start();
+
+    recognition.onresult = (event) => {
+        chatInput.value = event.results[0][0].transcript;
+    };
+});
+
+
+
+</script>
+</body>
+</html>
