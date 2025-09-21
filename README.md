@@ -33,6 +33,10 @@ Responsive aur User-Friendly Interface: Is prototype ka interface mobile aur des
 Features
 User Authentication: Naagrik (citizen) aur doctor ke roop mein login.
 
+medilink id :yeh aadhar card jaisi ek unique id hogi only for medical purpose jisme ek patient ki sabhi medical reports ek jagah hogi and appointment se lekar payment ke liye voo id use hoo sakti hai.
+
+ meidcine reminder : upload prescription to get reminders. 
+ 
 Online/Offline Appointments: Doctors ke saath online aur offline appointment book karne ki suvidha.
 
 Health Awareness: ShortCapsule section ke maadhyam se swasthya jaankari videos (health reels) pradarshit kiye jaate hain.
@@ -42,6 +46,7 @@ Emergency Services: Emergency buttons aur options provide karta hai.
 Donation Module: NGO aur community support ke liye daan (donation) ki suvidha.
 
 Health Monitoring: Health Meter feature ke through health ko tar sakte hai.
+ 
 
 benifites
 1.Trending Diseases Data (ट्रेंडिंग बीमारियों का डेटा):
@@ -55,3 +60,33 @@ Hospitals mein lambi lines aur beds ki problem ko dekhte hue, yeh app choti-moti
 3.Stops Misinformation and Spreads Awareness (अफवाहों पर रोक और जागरूकता):
 
 ShortCapsule section mein sirf certified specialist doctors hi bimaariyon se related sahi jaankari aur awareness videos (reels) share karenge. Isse society mein galat information (afwah) failna band ho jayegi aur log kisi bhi bimaari ke baare mein correct knowledge paa sakenge.
+
+features toh bohot hai but maksad ek {na sirf nabha balki}india ki medication facility ko enhance karne kaa sudharne ka logon ko satik upchaar or jagruk karne kaa.
+
+it is suggested to go to our prototype and experience it.
+
+#voice call feature for low bandwith area through helpline and medilink id.
+#ai chikitsak for basic upchaar.
+#health meter to track fitness or helth.
+#medition reminder and medical store locator 
+#book offline appointments
+#access of updated new version to gov servants {pradhan,secretory etc}if any people found  app is complicated and not comfortable.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+by:Tech prodigies 
