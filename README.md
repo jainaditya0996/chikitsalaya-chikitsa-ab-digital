@@ -35,7 +35,7 @@ User Authentication: Naagrik (citizen) aur doctor ke roop mein login.
 
 medilink id :yeh aadhar card jaisi ek unique id hogi only for medical purpose jisme ek patient ki sabhi medical reports ek jagah hogi and appointment se lekar payment ke liye voo id use hoo sakti hai.
 
- meidcine reminder : upload prescription to get reminders. 
+ meidicine reminder : upload prescription to get reminders. 
  
 Online/Offline Appointments: Doctors ke saath online aur offline appointment book karne ki suvidha.
 
